@@ -1,11 +1,11 @@
 package com.jankuester.pdfviewer.core.pdfparser
 {
-	import com.jankuester.pdfviewer.core.interfaces.IDisposable;
 	
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayList;
+	import com.jankuester.pdfviewer.core.interfaces.IDisposable;
 
 	public interface ITokenizer extends IDisposable
 	{

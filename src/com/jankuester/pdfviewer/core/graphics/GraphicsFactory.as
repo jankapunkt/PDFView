@@ -1,5 +1,9 @@
 package com.jankuester.pdfviewer.core.graphics
 {
+	import flash.utils.ByteArray;
+	
+	import spark.components.Image;
+
 	/**
 	 * Light-Factory which creates graphics related objects, when interpreting the content stream.
 	 */
@@ -15,6 +19,14 @@ package com.jankuester.pdfviewer.core.graphics
 		{
 			var g:GraphicsObject = new GraphicsObject();
 			return g;
+		}
+		
+		
+		public static function createImageObject(streamDecoded:ByteArray):Image
+		{
+			var i:Image = new Image();
+				i.source = streamDecoded;
+			return i;	
 		}
 	}
 }

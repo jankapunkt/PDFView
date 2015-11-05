@@ -19,6 +19,7 @@ package com.jankuester.pdfviewer.core.pdfparser
 	public class ResourceTokenizer implements ITokenizer, IDisposable
 	{
 		protected var _source:ByteArray;
+		
 		public function ResourceTokenizer()
 		{
 		}
