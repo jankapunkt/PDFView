@@ -3,10 +3,23 @@ package com.jankuester.pdfviewer.utils
 	import com.jankuester.pdfviewertests.utils.StringUtils;
 	
 	import flash.utils.ByteArray;
-
+	
+	/**
+	 * 
+	 * Utility class for common binary operations on ByteArrays
+	 * 
+	 */
 	public class ByteArrayUtils
 	{
-		
+		/**
+		 * Writes a string as utf bytes to a ByteArray and overwrites all following bytes from pos
+		 * 
+		 * @param by The ByteArray to write 
+		 * @param s The string to write
+		 * @param pos the position to start the writing
+		 * @param preservePos preserve the initial position of the array
+		 * @return the written bytearray
+		 */	
 		public static function writeString(ba:ByteArray,s:String, pos:int=0, preservePos:Boolean=false):ByteArray
 		{
 			if (s==null || s=="")return ba;
@@ -25,6 +38,15 @@ package com.jankuester.pdfviewer.utils
 			return ba;
 		}
 		
+		/**
+		 * Writes a string as utf bytes to a ByteArray but does not overwrite all following bytes but instead splits on pos and inserts the string
+		 * 
+		 * @param by The ByteArray to write 
+		 * @param s The string to write
+		 * @param pos the position to start the writing
+		 * @param preservePos preserve the initial position of the array
+		 * @return the new bytearray including all old bytes and the new inserted string
+		 */	
 		public static function insertString(ba:ByteArray, s:String, pos:int=0, preservePos:Boolean=false):ByteArray
 		{
 			if (s==null || s=="")
@@ -49,6 +71,15 @@ package com.jankuester.pdfviewer.utils
 			return newBytes;
 		}
 
+		/**
+		 * Reads a string from a given position and given length from a ByteArray
+		 * 
+		 * @param by The ByteArray to write 
+		 * @param start The start position to read
+		 * @param len The length of the bytes/characters to read
+		 * @param preservePos preserve the initial position of the array
+		 * @return the resulting utf string
+		 */	
 		public static function readString(ba:ByteArray, start:int=0, len:int=-1, preservePos:Boolean=true):String
 		{
 			if (ba == null)
@@ -82,6 +113,15 @@ package com.jankuester.pdfviewer.utils
 			return s;
 		}
 		
+		/**
+		 * Reads a string from a given start and end position from a ByteArray
+		 * 
+		 * @param by The ByteArray to write 
+		 * @param start The start position to read
+		 * @param to The end position to read
+		 * @param preservePos preserve the initial position of the array
+		 * @return the resulting utf string
+		 **/
 		public static function readStringFromTo(ba:ByteArray, start:int=0, to:int=-1, preservePos:Boolean=true):String
 		{
 			if (ba == null)
@@ -106,7 +146,10 @@ package com.jankuester.pdfviewer.utils
 				ba.position = posBuff;
 			return s;
 		}
-	
+		
+		/**
+		 * Copys a ByteArray's content to a new created ByteArray.
+		 */
 		public static function clone(ba:ByteArray):ByteArray
 		{
 			if (ba == null)return new ByteArray();
@@ -118,44 +161,9 @@ package com.jankuester.pdfviewer.utils
 			return clone;
 		}
 		
-		public static function padString(str:String, len:int, char:String, padLeft:Boolean = true):String
-		{
-			var padLength:int = len - str.length;
-			var str_padding:String = "";
-			if(padLength > 0 && char.length == 1)
-				for(var i:int = 0; i < padLength; i++)
-					str_padding += char;
-			
-			return (padLeft ? str_padding : "") + str + (!padLeft ? str_padding: "");
-		}
-		
-		
-		public static function byteArrayToBinaryString(bArray:ByteArray):String
-		{
-			// binary string to return
-			var str:String = "";
-			
-			// store length so that it is not recomputed on every loop
-			var aLen:uint = bArray.length;
-			
-			// loop over all available bytes and concatenate the padded string to return string
-			for(var i:int = 0; i < aLen; i++)
-				str += padString(bArray[i].toString(2), 8, "0");
-			
-			// return binary string
-			return str;
-		}
-		
-		public static function printByteArray(ba:ByteArray):void
-		{
-			if(ba == null || ba.bytesAvailable <= 0)return;
-			
-			while(ba.bytesAvailable)
-			{
-				trace(ba.readUTFBytes(ba.bytesAvailable));
-			}
-		}
-		
+		/**
+		 * Splis a bytearray to an array of line-seperated strings.
+		 */
 		public static function getByteArrayAsStringList(ba:ByteArray):Array
 		{
 			if(ba == null || ba.bytesAvailable <= 0)return null;
@@ -202,7 +210,13 @@ package com.jankuester.pdfviewer.utils
 			return b;
 		}
 		
-		
+		/**
+		 * Searches a string occurrence in a ByteArray from start and returns the first found position.
+		 * @param ba The ByteArray to search the pattern in
+		 * @param pattern a String to search within the ByteArray
+		 * @param preservePos preserve the initial position of the array
+		 * @return an integer with the position in the byteArray
+		 */
 		public static function indexOf(ba:ByteArray, pattern:String,preservePos:Boolean=true):int
 		{
 			if( ba == null || ba.length==0)return -1;
@@ -229,6 +243,13 @@ package com.jankuester.pdfviewer.utils
 			return -1;
 		}
 		
+		/**
+		 * Searches a string occurrence in a ByteArray from the end and returns the first (=last) found position.
+		 * @param ba The ByteArray to search the pattern in
+		 * @param pattern a String to search within the ByteArray
+		 * @param preservePos preserve the initial position of the array
+		 * @return an integer with the position in the byteArray
+		 */
 		public static function lastIndexOf(ba:ByteArray, pattern:String, preservePos:Boolean=true):int
 		{
 			if( ba == null || ba.length==0)return -1;
@@ -251,10 +272,5 @@ package com.jankuester.pdfviewer.utils
 				ba.position=posBuff;
 			return -1;
 		}
-		
-		
-		
-
-
 	}
 }

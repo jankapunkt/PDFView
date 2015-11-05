@@ -7,6 +7,7 @@ package com.jankuester.pdfviewer.core.graphics
 		public function GraphicsState()
 		{
 		}
+		
 		//---------------------- DEVICE INDEPENDENT STATES ------------------------------//
 		public var CTM:Array;	//current transformation matrix
 		public var clippingPath:Path;

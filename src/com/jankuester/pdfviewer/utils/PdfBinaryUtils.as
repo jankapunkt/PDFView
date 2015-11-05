@@ -6,6 +6,10 @@ package com.jankuester.pdfviewer.utils
 	import flash.utils.ByteArray;
 	import flash.utils.CompressionAlgorithm;
 
+	
+	/**
+	 * Commonb operations on ByteArrays with PDF-specific purpose.
+	 */
 	public class PdfBinaryUtils
 	{
 		
@@ -109,7 +113,13 @@ package com.jankuester.pdfviewer.utils
 			return streams;
 		}
 		
-		
+		/**
+		 * Decodes an encoded byte stream.
+		 * @param ba The ByteArray containing the encoded byte stream
+		 * @param start the position where the stream to decoded starts
+		 * @param end the position where the stream to decode ends
+		 * @return a byteArray containing decoded bytes
+		 */
 		public static function decodeStream(ba:ByteArray,start:int,end:int):ByteArray
 		{
 			
@@ -149,6 +159,9 @@ package com.jankuester.pdfviewer.utils
 			return null;
 		}
 		
+		/**
+		 * Searches from a given position backwards to find the definition of the stream encoding type.
+		 */
 		public static function getStreamDef(ba:ByteArray, pos:int, preservePos:Boolean=true):String
 		{
 			if (ba == null) return "none";
@@ -199,7 +212,9 @@ package com.jankuester.pdfviewer.utils
 			return type;
 		}
 		
-		
+		/**
+		 * Removes unwanted characters which declare the start of a stream because they protect the ByteArray from decoding the stream.
+		 */
 		public static function purgeStreamChars(ba:ByteArray, start:int):int
 		{
 			var count:int= 0;
@@ -218,6 +233,9 @@ package com.jankuester.pdfviewer.utils
 			return count;
 		}
 		
+		/**
+		 * Removes unwanted characters which declare the start of a stream because they protect the ByteArray from decoding the stream.
+		 */
 		public static function purgeEndstreamChars(ba:ByteArray, end:int):int
 		{
 			var count:int= 0;

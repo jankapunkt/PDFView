@@ -7,7 +7,9 @@ package com.jankuester.pdfviewer.core.graphics
 	
 	import mx.collections.ArrayList;
 	
-
+	/**
+	 * Class to interpret the content stream of a page and transform it into displayable objects.
+	 */
 	public class ContentStreamReader implements IDisposable
 	{
 		//---------------------- GRAPHIC STATE OPERATORS ------------------------------//

@@ -8,22 +8,27 @@ package com.jankuester.pdfviewer.core.graphics
 	
 	import spark.components.Group;
 
+	/**
+	 * A container which keeps reference of the graphics objects.
+	 * 
+	 */
 	public class PageRenderer extends Group implements IDisposable
 	{
-		public function PageRenderer()
-		{
+		protected var _reader:ContentStreamReader;
 		
-		}
+		/** CONSTRUCTOR **/
+		public function PageRenderer(){}
 		
+		/** DECONSTRUCTOR **/
 		public function dispose():void
 		{
 			this.removeAllElements();
 			_reader.dispose();
 		}
 		
-		protected var _reader:ContentStreamReader;
-		
-		
+		/** <p>prepares the renderer by extracting the page content into graphic objects and adding them to this renderer </p> 
+		 * 	<p>Rendering specific settings are declared within the graphics object</p>
+		 * **/
 		public function prepare(content:PageContent, resources:PageResources, dimY:Number):void
 		{
 			_reader = new ContentStreamReader();

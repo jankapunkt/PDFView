@@ -15,7 +15,6 @@ package com.jankuester.pdfviewer.core.model.pages
 		protected var _root:PageNode;
 		
 		
-		
 		public function PageTree()
 		{
 			super();
