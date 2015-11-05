@@ -1,4 +1,10 @@
 # PDFView
 An  Actionscript 3 based PDF viewer build from scratch
 
-Current status: basic loading and parsing of page tree, pages, resources and content streams, displaying texts.
+## Current status
+
+-loading page tree and pages
+-loading resources
+-read content streams
+-decode cmap font encoding to unicode
+-displaying texts
