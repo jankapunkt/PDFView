@@ -1,0 +1,14 @@
+#flex project related files
+.FlexUnitSettings
+.FlexUnitSettings/
+.FlexUnitSettings/*
+.flex*
+.action*
+.fxp*
+.project
+.settings/*
+.settings/
+.settings
+bin-debug
+bin-debug/
+bin-debug/*

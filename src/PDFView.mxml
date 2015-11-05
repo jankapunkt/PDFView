@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="windowedapplication1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.jankuester.pdfviewer.core.graphics.PageRenderer;
+			import com.jankuester.pdfviewer.core.model.pages.PageNode;
+			import com.jankuester.pdfviewer.core.pdfloader.PDFLoader;
+			
+			import mx.events.FlexEvent;
+			
+			protected var currentPage:int = 1;
+			protected var loader:PDFLoader;
+			
+			protected var _currentRenderer:PageRenderer;
+			
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				maximize();
+				loader = new PDFLoader();
+				loader.addEventListener(PDFLoader.LOAD_COMPLETE, onLoadComplete);
+				loader.prepare("assets/lorem.pdf");
+				loader.loadFile();
+				
+			}
+			
+
+			
+			protected function onLoadComplete(event:Event):void
+			{
+				renderPage();
+			}
+			
+			
+			
+			protected function updatePageLabel():void
+			{
+				pageLabel.text = String(currentPage)+ " / "+String(loader.pages);
+			}
+			
+			private function renderPage():void
+			{
+				updatePageLabel();
+				var pageDef:PageNode = loader.getPageAt(currentPage-1);
+				page.width = pageDef.mediaBox.w;
+				page.height= pageDef.mediaBox.h;
+				pageDef.loadContents();
+				pageDef.loadResources();
+				_currentRenderer = new PageRenderer();
+				_currentRenderer.prepare(pageDef.contents, pageDef.resources, page.height);
+				page.addElement(_currentRenderer);
+			}
+			
+			protected function next_clickHandler(event:MouseEvent):void
+			{
+				if(currentPage == loader.pages)return;
+				currentPage++;
+				cleanPage();
+				renderPage();
+			}
+			
+			protected function prev_clickHandler(event:MouseEvent):void
+			{
+				if(currentPage == 1)return;
+				currentPage--;
+				cleanPage();
+				renderPage();
+			}
+			
+			protected function cleanPage():void
+			{
+				page.removeAllElements();
+				_currentRenderer.dispose();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Platzieren Sie nichtvisuelle Elemente (z. B. Dienste, Wertobjekte) hier -->
+	</fx:Declarations>
+	<s:Group width="100%" height="100%">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="0xa4a4a4" />
+			</s:fill>
+		</s:Rect>	
+	</s:Group>
+	<s:VGroup width="100%" height="100%" verticalAlign="top" horizontalAlign="center">
+		<s:HGroup id="navBar" width="100%" height="50" verticalAlign="middle">
+			<s:Button id="prev" label="prev" click="prev_clickHandler(event)" />
+			<s:Label width="100" textAlign="center" id="pageLabel" text="" fontSize="14" />
+			<s:Button id="next" label="next" click="next_clickHandler(event)" />
+		</s:HGroup>
+		<s:HGroup id="pageContainer" width="100%" height="100%" horizontalAlign="center">
+			<s:Group id="pageBG">
+				<s:Rect width="100%" height="100%">
+					<s:fill>
+						<s:SolidColor color="0xFFFFFF" />
+					</s:fill>
+				</s:Rect>
+				<s:Group id="page" width="100%" height="100%" />
+			</s:Group>
+			
+		</s:HGroup>
+	</s:VGroup>
+	
+</s:WindowedApplication>
