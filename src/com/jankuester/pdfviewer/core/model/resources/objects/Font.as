@@ -15,6 +15,7 @@ package com.jankuester.pdfviewer.core.model.resources.objects
 		}
 		
 		public var name:String;
+		
 		public var subType:String;
 		
 		protected var _fontDescriptor:FontDescriptor;

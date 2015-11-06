@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
-					   xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="windowedapplication1_creationCompleteHandler(event)">
+					   xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   mouseWheel="windowedapplication1_mouseWheelHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import com.jankuester.pdfviewer.core.graphics.PageRenderer;
@@ -20,19 +21,15 @@
 				maximize();
 				loader = new PDFLoader();
 				loader.addEventListener(PDFLoader.LOAD_COMPLETE, onLoadComplete);
-				loader.prepare("assets/lorem.pdf");
+				loader.prepare("assets/lorem2.pdf");
 				loader.loadFile();
 				
 			}
-			
 
-			
 			protected function onLoadComplete(event:Event):void
 			{
 				renderPage();
 			}
-			
-			
 			
 			protected function updatePageLabel():void
 			{
@@ -84,6 +81,12 @@
 			{
 				page.scaleX -= 0.1;
 				page.scaleY -= 0.1;
+			}
+			
+			protected function windowedapplication1_mouseWheelHandler(event:MouseEvent):void
+			{
+				page.scaleX += event.delta/10;
+				page.scaleY += event.delta/10;
 			}
 			
 		]]>

@@ -11,9 +11,7 @@ package com.jankuester.pdfviewer.core.pdfparser
 	
 	public class XObjectTokenizer implements ITokenizer
 	{
-		public function XObjectTokenizer()
-		{
-		}
+		public function XObjectTokenizer(){}
 		
 		protected var _source:ByteArray;
 		
@@ -54,10 +52,9 @@ package com.jankuester.pdfviewer.core.pdfparser
 				trace("DECODE::::");
 				var streams:Array = PdfBinaryUtils.findStreamPositions(_source);
 				var decoded:ByteArray = PdfBinaryUtils.decodeStream(_source, streams[0], streams[1]);
-				trace("DECODED-----------");
+				trace("DECODED-----------"+decoded.length);
 				var combined:ByteArray = ByteArrayUtils.replaceFromTo(_source, streams[0],streams[1], decoded, 0, decoded.length);
-				dict[PDFConstants.CONTAINER_STREAM] = combined;
-				
+				dict[PDFConstants.CONTAINER_STREAM] = decoded;
 				var header:ByteArray = new ByteArray();
 					header.writeBytes(_source,0,streams[0]);
 				_source = header;
@@ -74,22 +71,20 @@ package com.jankuester.pdfviewer.core.pdfparser
 				{
 					var fref:String;
 					var token:String = split[j];
-					//trace(token);
-					if (token.indexOf("width") >-1)
+					var tSplit:Array;
+					if (token.indexOf("Width") >-1)
 					{
-
-						
+						tSplit = token.split(" ");		
+						dict["width"] = tSplit[1];
 					}
-					if (token.indexOf("height") >-1)
+					if (token.indexOf("Height") >-1)
 					{
-						
-						
+						tSplit = token.split(" ");
+						dict["height"] = tSplit[1];
+						trace("height: "+tSplit[1]);
 					}
 				}
 			}
-			
-			
-			
 			return dict;
 		}
 		

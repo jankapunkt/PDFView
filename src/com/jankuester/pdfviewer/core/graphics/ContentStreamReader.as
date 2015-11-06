@@ -2,10 +2,16 @@ package com.jankuester.pdfviewer.core.graphics
 {
 	import com.jankuester.pdfviewer.core.interfaces.IDisposable;
 	import com.jankuester.pdfviewer.core.model.resources.PageResources;
+	import com.jankuester.pdfviewer.core.model.resources.objects.XObject;
 	
+	import flash.geom.Matrix;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayList;
+	
+	import spark.components.Label;
+	import spark.primitives.Rect;
 	
 	/**
 	 * Class to interpret the content stream of a page and transform it into displayable objects.
@@ -131,8 +137,7 @@ package com.jankuester.pdfviewer.core.graphics
 					//decode actual text strings
 					if (token.indexOf(T_CUSTOM_POSITIONING) > -1 || token.indexOf(T_SHOW_TEXT) > -1)
 					{
-						_currentObj.l.setStyle("fontSize",_values[0]);
-						_values = [];
+
 						
 						var startText:int = token.indexOf("[");
 						var endofText:int = token.indexOf("]");
@@ -155,7 +160,8 @@ package com.jankuester.pdfviewer.core.graphics
 							}
 						}
 						trace(tBuff);
-						_currentObj.l.text = tBuff;
+						_currentObj.addElement(GraphicsFactory.createLabel(tBuff,_values[0]));
+						_values = [];
 					}
 				}
 				
@@ -186,6 +192,12 @@ package com.jankuester.pdfviewer.core.graphics
 						trace("StrokginCOlor: "+_values[0]+" "+_values[1]+" "+_values[2]);
 						_values = [];
 						break;
+					case(G_MATRIX_MODIFY):
+						var mat:Matrix = new Matrix(_values[0],_values[1],_values[2],_values[3],_values[4],_values[5]);
+						_currentObj.transform.matrix.concat(mat);
+						trace(_values[0]+" "+_values[1]+" "+_values[2]+" "+_values[3]+" "+_values[4]+" "+_values[5]+" ");
+						//_values = [];
+						break;
 				}
 				
 				if (token.search(/(\/[F]+[0-9]+)/g) >-1)
@@ -195,7 +207,21 @@ package com.jankuester.pdfviewer.core.graphics
 					_values = [];
 					cfont = token.replace("/","");
 					cmap = resources.font.getFont(cfont).toUnicode.cmap;
+					continue;
 				}
+				
+				if (token.search(/(\/[Im]+[0-9]+)/g) >-1)
+				{
+					trace("====> load image "+token);
+					var xobj:XObject = resources.xobject.getXObject(token.replace("/",""));
+					_currentObj.x = _values[4];
+					_currentObj.y = _values[5] + _values[3];
+					_currentObj.addElement(GraphicsFactory.createImageObject(xobj.getStream(),_values[0], _values[3]));
+					_values = [];
+					continue;
+				}
+				
+				
 			}
 			
 		}

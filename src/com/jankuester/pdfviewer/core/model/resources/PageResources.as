@@ -5,7 +5,7 @@ package com.jankuester.pdfviewer.core.model.resources
 	import com.jankuester.pdfviewer.core.model.resources.maps.ColorSpaceMap;
 	import com.jankuester.pdfviewer.core.model.resources.maps.ExtGStateMap;
 	import com.jankuester.pdfviewer.core.model.resources.maps.FontMap;
-	import com.jankuester.pdfviewer.core.model.resources.maps.PattermMap;
+	import com.jankuester.pdfviewer.core.model.resources.maps.PatternMap;
 	import com.jankuester.pdfviewer.core.model.resources.maps.ProcSetMap;
 	import com.jankuester.pdfviewer.core.model.resources.maps.PropertiesMap;
 	import com.jankuester.pdfviewer.core.model.resources.maps.ShadingMap;
@@ -17,40 +17,83 @@ package com.jankuester.pdfviewer.core.model.resources
 	import flash.utils.ByteArray;
 	
 	/**
-	 * Required; inheritable)
- A dictio
-nary containing any resources 
-required by the page (see 
-7.8.3, "Resource Dictionaries"
-). If the 
-page requires no resources, the value of this entry shall be an 
-e
-mpty dictionary. Omitting the entry
- entirely indicates that the 
-resources shall be inherited from an ancestor node in the page tree. 
+	 * <p>Extract from the Adobe PDF specification:</p>
+	 * <p>Required; inheritable) A dictionary containing any resources required by the page (see 7.8.3, "Resource Dictionaries").
+	 * If the page requires no resources, the value of this entry shall be an empty dictionary. 
+	 * Omitting the entryentirely indicates that the resources shall be inherited from an ancestor node in the page tree.</p> 
 	 */
 	public class PageResources extends COSDictionary
 	{
-		protected var _isInherited:Boolean = false;
-		protected var _extgstate:ExtGStateMap;
-		protected var _colorSpace:ColorSpaceMap;
-		protected var _pattern:PattermMap;
-		protected var _shading:ShadingMap;
-		protected var _xobjext:XObjectMap;
-		protected var _font:FontMap;
-
-		public function get font():FontMap
-		{
-			return _font;
-		}
-
-		protected var _procSet:ProcSetMap;
-		protected var _properties:PropertiesMap;
-		
+		/** CONSTRUCTOR **/
 		public function PageResources()
 		{
 			super();
 		}
+		
+		protected var _isInherited:Boolean = false;
+
+		public function get isInherited():Boolean
+		{
+			return _isInherited;
+		}
+
+		protected var _extgstate:ExtGStateMap;
+
+		public function get extgstate():ExtGStateMap
+		{
+			return _extgstate;
+		}
+
+		protected var _colorSpace:ColorSpaceMap;
+
+		public function get colorSpace():ColorSpaceMap
+		{
+			return _colorSpace;
+		}
+
+		protected var _pattern:PatternMap;
+
+		public function get pattern():PatternMap
+		{
+			return _pattern;
+		}
+
+		protected var _shading:ShadingMap;
+
+		public function get shading():ShadingMap
+		{
+			return _shading;
+		}
+
+		protected var _xobject:XObjectMap;
+
+		public function get xobject():XObjectMap
+		{
+			return _xobject;
+		}
+
+		protected var _font:FontMap;
+		
+		public function get font():FontMap
+		{
+			return _font;
+		}
+		
+		protected var _procSet:ProcSetMap;
+
+		public function get procSet():ProcSetMap
+		{
+			return _procSet;
+		}
+
+		
+		protected var _properties:PropertiesMap;
+
+		public function get properties():PropertiesMap
+		{
+			return _properties;
+		}
+		
 		
 		override public function load(source:ByteArray, tokenizer:ITokenizer):void
 		{
@@ -63,11 +106,11 @@ resources shall be inherited from an ancestor node in the page tree.
 			if (obj != null)
 			{
 				trace("xobj : "+_dict[PDFConstants.RESOURCE_XOBJECT]);
-				_xobjext = new XObjectMap();
+				_xobject = new XObjectMap();
 				//if (XRef.instance().isReference(obj))
 				//	_xobjext.reference = obj;
 				//else
-					_xobjext.loadString(obj);
+				_xobject.loadString(obj);
 			}
 			
 			var font:String = _dict[PDFConstants.RESOURCE_FONT];

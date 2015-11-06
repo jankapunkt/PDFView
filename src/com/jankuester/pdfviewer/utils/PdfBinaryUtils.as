@@ -120,14 +120,14 @@ package com.jankuester.pdfviewer.utils
 		 * @param end the position where the stream to decode ends
 		 * @return a byteArray containing decoded bytes
 		 */
-		public static function decodeStream(ba:ByteArray,start:int,end:int):ByteArray
+		public static function decodeStream(ba:ByteArray,start:int,end:int, isImage:Boolean=false):ByteArray
 		{
 			
 			var type:String= getStreamDef(ba, start);
 			ba.position = 0;
 			var len:int = end-start;
 			var b:ByteArray = new ByteArray();
-			//trace("type:::::"+type+" "+ba.length);
+			trace("type:::::"+type+" "+ba.length);
 			try
 			{
 				if (type == "none")
@@ -138,16 +138,20 @@ package com.jankuester.pdfviewer.utils
 				//trace("--------------------------------------------------------------");
 				//trace(ByteArrayUtils.readString(b));
 				//trace("--------------------------------------------------------------");
+				if (isImage && type==PDFConstants.DEFLATE) //dont encode png
+				{
+					b.uncompress(CompressionAlgorithm.DEFLATE);
+				}
+				
+				
 				if(type==PDFConstants.DEFLATE)
 				{
+					trace("=>uncompress ZLIB stream");
 					b.uncompress(CompressionAlgorithm.ZLIB);
 				}
-				if(type==PDFConstants.DCT)
-				{
-					//do nothing and load the jpgeg stream via loader later
-				}
+
 				b.position = 0;
-				//trace(type+" => success! len="+b.length);
+				trace(type+" => success! len="+b.length);
 				return b;
 			}catch(e:Error){
 				trace("=========================================================================================================");
