@@ -8,3 +8,4 @@ An  Actionscript 3 based PDF viewer build from scratch
 - read content streams
 - decode cmap font encoding to unicode
 - displaying texts
+- displaying embedded JPEG images
