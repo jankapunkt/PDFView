@@ -2,16 +2,11 @@ package com.jankuester.pdfviewer.core.graphics
 {
 	import com.jankuester.pdfviewer.core.pdfloader.PDFImage;
 	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.Loader;
-	import flash.system.LoaderContext;
+	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
 	
 	import spark.components.Image;
 	import spark.components.Label;
-	
-	import org.osmf.elements.ImageLoader;
 
 	/**
 	 * Light-Factory which creates graphics related objects, when interpreting the content stream.
@@ -31,13 +26,14 @@ package com.jankuester.pdfviewer.core.graphics
 		}
 		
 		
-		public static function createImageObject(streamDecoded:ByteArray, width:int,height:int):Image
+		public static function createImageObject(streamDecoded:ByteArray,type:String, width:int=0,height:int=0, transformMatrix:Matrix=null):Image
 		{
 			var i:PDFImage = new PDFImage();
+				i.type = type;
 				i.smooth=true;
 				i.width = width;
 				i.height = height;
-				i.loadBinary(streamDecoded);
+				i.loadBinary(streamDecoded, transformMatrix);
 			return i;	
 		}
 		

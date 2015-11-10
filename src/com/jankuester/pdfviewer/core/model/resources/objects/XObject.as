@@ -17,6 +17,10 @@ package com.jankuester.pdfviewer.core.model.resources.objects
 		{
 			return _dict[PDFConstants.CONTAINER_STREAM];
 		}
+		public function getType():String
+		{
+			return  _dict[PDFConstants.TAG_FILTER];
+		}
 		
 		public function getWidth():int
 		{

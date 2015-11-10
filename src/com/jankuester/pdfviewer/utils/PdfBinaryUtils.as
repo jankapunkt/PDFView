@@ -127,20 +127,20 @@ package com.jankuester.pdfviewer.utils
 			ba.position = 0;
 			var len:int = end-start;
 			var b:ByteArray = new ByteArray();
-			trace("type:::::"+type+" "+ba.length);
+			trace("type:::::"+type+" "+ba.length+" start="+start+" end="+end+" len="+len);
 			try
 			{
 				if (type == "none")
 					type==PDFConstants.DEFLATE;//return ba;
 				
 				b.writeBytes(ba,start, len);
-				//trace(b.length);
-				//trace("--------------------------------------------------------------");
-				//trace(ByteArrayUtils.readString(b));
-				//trace("--------------------------------------------------------------");
-				if (isImage && type==PDFConstants.DEFLATE) //dont encode png
+				//trace( ByteArrayUtils.readString(b) );
+				
+				if (isImage && type==PDFConstants.DEFLATE) //encode png image
 				{
-					b.uncompress(CompressionAlgorithm.DEFLATE);
+					b.uncompress(CompressionAlgorithm.ZLIB);
+					b.position = 0;
+					return b;
 				}
 				
 				
@@ -158,7 +158,7 @@ package com.jankuester.pdfviewer.utils
 				trace("readStream: error - "+e.message+" type="+type+" len="+b.length);
 				//trace(ByteArrayUtils.readString(b));
 				trace("=========================================================================================================");
-				return null;	
+				return b;	
 			}
 			return null;
 		}

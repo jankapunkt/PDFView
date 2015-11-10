@@ -4,10 +4,19 @@ package com.jankuester.pdfviewer.core.pdfparser
 	import com.jankuester.pdfviewer.utils.ByteArrayUtils;
 	import com.jankuester.pdfviewer.utils.PdfBinaryUtils;
 	
+	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
+	import flash.utils.Endian;
 	
 	import mx.collections.ArrayList;
+	import mx.utils.Base64Decoder;
+	
+	import org.hamcrest.mxml.text.EndsWith;
 	
 	public class XObjectTokenizer implements ITokenizer
 	{
@@ -49,10 +58,17 @@ package com.jankuester.pdfviewer.core.pdfparser
 			
 			if (xString.indexOf(PDFConstants.CONTAINER_STREAM)>-1)
 			{
-				trace("DECODE::::");
+				trace("XOBJECT DECODE::::");
 				var streams:Array = PdfBinaryUtils.findStreamPositions(_source);
-				var decoded:ByteArray = PdfBinaryUtils.decodeStream(_source, streams[0], streams[1]);
+				dict[PDFConstants.TAG_FILTER] = PdfBinaryUtils.getStreamDef(_source, streams[0]);
+				//trace(ByteArrayUtils.readString(_source));
+				var decoded:ByteArray = PdfBinaryUtils.decodeStream(_source, streams[0], streams[1],true);
+				
 				trace("DECODED-----------"+decoded.length);
+				
+				
+				
+				
 				var combined:ByteArray = ByteArrayUtils.replaceFromTo(_source, streams[0],streams[1], decoded, 0, decoded.length);
 				dict[PDFConstants.CONTAINER_STREAM] = decoded;
 				var header:ByteArray = new ByteArray();

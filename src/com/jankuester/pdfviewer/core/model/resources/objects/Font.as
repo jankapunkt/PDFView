@@ -26,11 +26,11 @@ package com.jankuester.pdfviewer.core.model.resources.objects
 		}
 
 		
-		protected var _toUnicode:FontUnicodeMapping;
+		protected var _unicodeMapping:FontUnicodeMapping;
 
-		public function get toUnicode():FontUnicodeMapping
+		public function get unicodeMapping():FontUnicodeMapping
 		{
-			return _toUnicode;
+			return _unicodeMapping;
 		}
 		
 		
@@ -62,10 +62,10 @@ package com.jankuester.pdfviewer.core.model.resources.objects
 			_fontDescriptor.subType = PDFConstants.FONT_TRUETYPE;
 			_fontDescriptor.load(XRef.instance().getReferenceBytes(_fontDescriptor.reference),tokenizer);
 			
-			_toUnicode = new FontUnicodeMapping();
-			_toUnicode.reference = _dict[PDFConstants.FONT_TOUNICODE];
-			trace("unicode ref: "+_toUnicode.reference);
-			_toUnicode.load(XRef.instance().getReferenceBytes(_toUnicode.reference),tokenizer);
+			_unicodeMapping = new FontUnicodeMapping();
+			_unicodeMapping.reference = _dict[PDFConstants.FONT_TOUNICODE];
+			trace("unicode ref: "+_unicodeMapping.reference);
+			_unicodeMapping.load(XRef.instance().getReferenceBytes(_unicodeMapping.reference),tokenizer);
 			
 		}
 		

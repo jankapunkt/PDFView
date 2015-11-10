@@ -193,9 +193,9 @@ package com.jankuester.pdfviewer.core.graphics
 						_values = [];
 						break;
 					case(G_MATRIX_MODIFY):
-						var mat:Matrix = new Matrix(_values[0],_values[1],_values[2],_values[3],_values[4],_values[5]);
-						_currentObj.transform.matrix.concat(mat);
-						trace(_values[0]+" "+_values[1]+" "+_values[2]+" "+_values[3]+" "+_values[4]+" "+_values[5]+" ");
+						//var mat:Matrix = new Matrix(_values[0],_values[1],_values[2],_values[3],_values[4],_values[5]);
+						//_currentObj.transform.matrix.concat(mat);
+						//trace(_values[0]+" "+_values[1]+" "+_values[2]+" "+_values[3]+" "+_values[4]+" "+_values[5]+" ");
 						//_values = [];
 						break;
 				}
@@ -206,17 +206,18 @@ package com.jankuester.pdfviewer.core.graphics
 					_currentObj.y = _values[1];
 					_values = [];
 					cfont = token.replace("/","");
-					cmap = resources.font.getFont(cfont).toUnicode.cmap;
+					cmap = resources.fontMap.getFont(cfont).unicodeMapping.cmap;
 					continue;
 				}
 				
 				if (token.search(/(\/[Im]+[0-9]+)/g) >-1)
 				{
 					trace("====> load image "+token);
+					var mat:Matrix = new Matrix(_values[0],_values[1],_values[2],_values[3]);
 					var xobj:XObject = resources.xobject.getXObject(token.replace("/",""));
 					_currentObj.x = _values[4];
-					_currentObj.y = _values[5] + _values[3];
-					_currentObj.addElement(GraphicsFactory.createImageObject(xobj.getStream(),_values[0], _values[3]));
+					_currentObj.y = _values[5]+_values[3];
+					_currentObj.addElement(GraphicsFactory.createImageObject(xobj.getStream(),xobj.getType(),_values[0], _values[3], mat));
 					_values = [];
 					continue;
 				}

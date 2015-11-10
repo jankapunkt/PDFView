@@ -72,11 +72,11 @@ package com.jankuester.pdfviewer.core.model.resources
 			return _xobject;
 		}
 
-		protected var _font:FontMap;
+		protected var _fontMap:FontMap;
 		
-		public function get font():FontMap
+		public function get fontMap():FontMap
 		{
-			return _font;
+			return _fontMap;
 		}
 		
 		protected var _procSet:ProcSetMap;
@@ -117,13 +117,13 @@ package com.jankuester.pdfviewer.core.model.resources
 			if (font != null)
 			{
 				trace("fonts: "+_dict[PDFConstants.RESOURCE_FONT]);
-				_font = new FontMap();
+				_fontMap = new FontMap();
 				if (XRef.instance().isReference(font))
 				{
-					_font.reference = font;
-					_font.load(XRef.instance().getReferenceBytes(font), new FontTokenizer());
+					_fontMap.reference = font;
+					_fontMap.load(XRef.instance().getReferenceBytes(font), new FontTokenizer());
 				}else{
-					_font.loadString(font);	
+					_fontMap.loadString(font);	
 				}
 			}
 			

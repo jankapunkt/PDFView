@@ -2,6 +2,9 @@ package com.jankuester.pdfviewer.utils
 {
 	import com.jankuester.pdfviewertests.utils.StringUtils;
 	
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
 	
 	/**
@@ -271,6 +274,44 @@ package com.jankuester.pdfviewer.utils
 			if(preservePos)
 				ba.position=posBuff;
 			return -1;
+		}
+		
+		
+		public static function writeByteArrayToFile(ba:ByteArray, type:String, prefix:String):Boolean
+		{
+			try
+			{
+				ba.position = 0;
+				var f:File = File.desktopDirectory.resolvePath(prefix+"_bytes.txt");
+				var fs:FileStream = new FileStream();					
+					fs.open(f, FileMode.WRITE);
+					switch(type)
+					{
+						case "hex":
+							while(ba.bytesAvailable && ba.bytesAvailable >= 32)
+							{
+								fs.writeUTF( ba.readInt().toString(16) );
+							}
+							break;
+						
+						case "text":
+							
+							break;
+						
+						case "bytes":
+							fs.writeBytes(ba);
+							break;
+					}
+					
+					fs.close();	
+			} 
+			catch(error:Error) 
+			{
+				throw new Error(error.message);
+				return false;
+			}
+			
+			return true;
 		}
 	}
 }
