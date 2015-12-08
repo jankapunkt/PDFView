@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					   xmlns:s="library://ns.adobe.com/flex/spark" 
-					   xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="windowedapplication1_creationCompleteHandler(event)"
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
 					   mouseWheel="windowedapplication1_mouseWheelHandler(event)">
 	<fx:Script>
 		<![CDATA[
@@ -33,7 +34,8 @@
 			
 			protected function updatePageLabel():void
 			{
-				pageLabel.text = String(currentPage)+ " / "+String(loader.pages);
+				currentPageInput.text =  String(currentPage);
+				maxPages.text =" /"+String(loader.pages);
 			}
 			
 			private function renderPage():void
@@ -73,20 +75,65 @@
 			
 			protected function zoomin_clickHandler(event:MouseEvent):void
 			{
-				page.scaleX += 0.1;
-				page.scaleY += 0.1;
+				zoom(0.2);
 			}
 			
 			protected function zoomout_clickHandler(event:MouseEvent):void
 			{
-				page.scaleX -= 0.1;
-				page.scaleY -= 0.1;
+				zoom(-0.2);
 			}
 			
 			protected function windowedapplication1_mouseWheelHandler(event:MouseEvent):void
 			{
-				page.scaleX += event.delta/10;
-				page.scaleY += event.delta/10;
+				var delta:Number = event.delta/10;
+				zoom(delta);
+			}
+			
+			protected function zoom(delta:Number):void
+			{
+				if (delta > 0 && (page.scaleX > 5 || page.scaleY > 5 || page.scaleX + delta > 5 || page.scaleY + delta > 5))
+				{
+					page.scaleX = 5;
+					page.scaleY = 5;
+					return;
+				}
+				if (delta < 0 && (page.scaleX < 0.2 || page.scaleY < 0.2 || page.scaleX + delta < 0.2 || page.scaleY + delta < 0.2))
+				{
+					page.scaleX = 0.2;
+					page.scaleY = 0.2;
+					return;
+				}
+				
+				page.scaleX += delta; 
+				page.scaleY += delta;
+			}
+			
+			protected function currentPageInput_focusOutHandler(event:FocusEvent):void
+			{
+				currentPageInputHandler();
+			}
+			
+			protected function currentPageInput_keyDownHandler(event:KeyboardEvent):void
+			{
+				currentPageInputHandler();
+			}
+			
+			protected function currentPageInputHandler():void
+			{
+				var targetPage:int = int(currentPageInput.text);
+				if (targetPage < 1 || targetPage > loader.pages || targetPage == currentPage)
+				{
+					currentPageInput.text = String(currentPage);
+					return;
+				}
+				setPageByInput(targetPage);
+			}
+			
+			protected function setPageByInput(targetPage:int):void
+			{
+				currentPage = targetPage;
+				cleanPage();
+				renderPage();
 			}
 			
 		]]>
@@ -94,32 +141,60 @@
 	<fx:Declarations>
 		<!-- Platzieren Sie nichtvisuelle Elemente (z. B. Dienste, Wertobjekte) hier -->
 	</fx:Declarations>
+	
+	<!-- BACKGROUND -->
 	<s:Group width="100%" height="100%">
 		<s:Rect width="100%" height="100%">
 			<s:fill>
-				<s:SolidColor color="0xa4a4a4" />
+				<s:SolidColor color="0x4a4a4a"/>
 			</s:fill>
 		</s:Rect>	
 	</s:Group>
-	<s:VGroup width="100%" height="100%" verticalAlign="top" horizontalAlign="center">
-		<s:HGroup id="navBar" width="100%" height="50" verticalAlign="middle">
-			<s:Button id="prev" label="prev" click="prev_clickHandler(event)" />
-			<s:Label width="100" textAlign="center" id="pageLabel" text="" fontSize="14" />
-			<s:Button id="next" label="next" click="next_clickHandler(event)" />
-			<s:Button id="zoomin" label="+" click="zoomin_clickHandler(event)" />
-			<s:Button id="zoomout" label="-" click="zoomout_clickHandler(event)" />
-		</s:HGroup>
-		<s:HGroup id="pageContainer" width="100%" height="100%" horizontalAlign="center">
-			<s:Group id="pageBG">
-				<s:Rect width="100%" height="100%">
-					<s:fill>
-						<s:SolidColor color="0xFFFFFF" />
-					</s:fill>
-				</s:Rect>
-				<s:Group id="page" width="100%" height="100%" />
-			</s:Group>
+	<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="top">
+		
+		
+		<!-- NAVIGATION BAR -->
+		<s:Group id="navBG" width="100%" height="36">
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:SolidColor color="0x3a3a3a"/>
+				</s:fill>
+			</s:Rect>
+			<s:HGroup id="navBar" width="100%" height="100%" verticalAlign="middle" paddingLeft="5" paddingRight="5">
+				<s:Button id="prev" label="prev" width="50" click="prev_clickHandler(event)"/>
+				<s:Button id="next" label="next" width="50" click="next_clickHandler(event)"/>
+				<s:Spacer width="10" />
+				<s:Label text="Page" color="0xa4a4a4" />
+				<s:TextInput id="currentPageInput" width="50" textAlign="right" focusOut="currentPageInput_focusOutHandler(event)" keyDown="currentPageInput_keyDownHandler(event)" />
+				<s:Label id="maxPages"  color="0xa4a4a4"/>
+				<s:Spacer width="100%" />
+				<s:Button id="zoomin" label="+"  width="28" click="zoomin_clickHandler(event)"/>
+				<s:Button id="zoomout" label="-" width="28" click="zoomout_clickHandler(event)"/>
+			</s:HGroup>
+		</s:Group>
 			
+		<s:HGroup width="100%" height="100%" id="contentContainer" horizontalAlign="center" clipAndEnableScrolling="true">
+			
+			<!-- ACTUAL PAGE -->
+			<s:HGroup id="pageContainer"  horizontalAlign="center" width="100%">
+				<s:Group id="pageBG">
+					<s:Rect width="100%" height="100%">
+						<s:fill>
+							<s:SolidColor color="0xFFFFFF"/>
+						</s:fill>
+						<s:filters>
+							<s:DropShadowFilter angle="0" blurX="16" blurY="16" color="0x000000"
+												distance="0" strength="1"/>
+						</s:filters>
+					</s:Rect>
+					<s:Group id="page" />
+				</s:Group>
+			</s:HGroup>
+			<s:VScrollBar height="100%" viewport="{this.contentContainer}" />
 		</s:HGroup>
+
+		
+		<s:HScrollBar width="100%" viewport="{this.pageContainer}" />
 	</s:VGroup>
 	
 </s:WindowedApplication>
