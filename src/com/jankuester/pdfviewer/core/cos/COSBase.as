@@ -54,5 +54,11 @@ package com.jankuester.pdfviewer.core.cos
 		{
 			_source = null;
 		}
+		
+		
+		public function print():void
+		{
+			throw new Error("abstract class. You have to override this method");
+		}
 	}
 }

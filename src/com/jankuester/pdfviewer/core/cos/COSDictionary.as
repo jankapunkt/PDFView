@@ -17,6 +17,17 @@ package com.jankuester.pdfviewer.core.cos
 		
 		protected var _dict:Dictionary;
 		
+		
+		override public function print():void
+		{
+			trace(" ---- PRINT COS DICTIONARY -----");
+			for each (var i:* in _dict) 
+			{
+				trace(i+" => " + _dict[i]);
+			}
+			trace("-------- END --------------------");
+		}
+		
 		override public function load(source:ByteArray, tokenizer:ITokenizer):void
 		{
 			_source = source;

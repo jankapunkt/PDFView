@@ -1,7 +1,6 @@
 package com.jankuester.pdfviewer.utils
 {
 	import com.jankuester.pdfviewer.core.model.PDFConstants;
-	import com.jankuester.pdfviewertests.utils.StringUtils;
 	
 	import flash.utils.ByteArray;
 	import flash.utils.CompressionAlgorithm;

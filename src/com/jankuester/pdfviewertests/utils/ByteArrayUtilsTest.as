@@ -8,12 +8,13 @@ package com.jankuester.pdfviewertests.utils
 	
 	import flexunit.framework.Assert;
 	
-	import org.flexunit.assertThat;
 	import org.flexunit.asserts.assertEquals;
-	import org.flexunit.asserts.assertNotNull;
 	
 	public class ByteArrayUtilsTest
 	{		
+		
+		public static const EXTENDED_CHARS:String ="helloworld?!%&/()=?456{[]}\\";
+		
 		
 		[Before]
 		public function setUp():void
@@ -57,10 +58,21 @@ package com.jankuester.pdfviewertests.utils
 			reg = new RegExp("hello");
 			Assert.assertMatch(reg, ByteArrayUtils.readString(ba,0,5));
 			
-			reg = new RegExp("!§$%&/()=?`");
+
+			
+			reg = new RegExp(EXTENDED_CHARS);
 			ba.clear();
-			ba.writeUTFBytes(reg.source);
-			Assert.assertEquals(reg.source, ByteArrayUtils.readString(ba,0,ba.length));
+			ByteArrayUtils.writeString(ba,reg.source,0);
+			Assert.assertEquals(reg.source, EXTENDED_CHARS);
+			Assert.assertEquals(EXTENDED_CHARS.length,reg.source.length);
+			
+			var odlPos:int = ba.position;
+			var result:String =  ByteArrayUtils.readString(ba,0,ba.length, true);
+			Assert.assertEquals(odlPos,ba.position);
+			
+
+			Assert.assertEquals(EXTENDED_CHARS.length,result.length);
+			Assert.assertEquals(reg.source,result);
 			
 		}
 		
@@ -72,8 +84,10 @@ package com.jankuester.pdfviewertests.utils
 			
 			var reg:RegExp = new RegExp("helloworld");
 			ba.position=0;
+			
 			Assert.assertEquals(reg.source, ByteArrayUtils.readStringFromTo(ba,0,ba.length,true));
 			Assert.assertEquals(ba.position,0);
+			
 			Assert.assertEquals(reg.source, ByteArrayUtils.readStringFromTo(ba,0,ba.length,false));
 			Assert.assertEquals(ba.position,ba.length);
 			
@@ -85,7 +99,10 @@ package com.jankuester.pdfviewertests.utils
 			reg = new RegExp("hello");
 			Assert.assertMatch(reg, ByteArrayUtils.readStringFromTo(ba,0,5));
 			
-			reg = new RegExp("!%&/()=?`");
+			reg = new RegExp(EXTENDED_CHARS);
+			Assert.assertEquals(reg.source, EXTENDED_CHARS);
+			Assert.assertEquals(EXTENDED_CHARS.length,reg.source.length);
+			
 			ba.clear();
 			ByteArrayUtils.writeString(ba,reg.source,0);
 			Assert.assertEquals(reg.source, ByteArrayUtils.readStringFromTo(ba,0,ba.length,true));

@@ -206,6 +206,9 @@ package com.jankuester.pdfviewer.core.graphics
 					_currentObj.y = _values[1];
 					_values = [];
 					cfont = token.replace("/","");
+					
+					resources.fontMap.print();
+					
 					cmap = resources.fontMap.getFont(cfont).unicodeMapping.cmap;
 					continue;
 				}

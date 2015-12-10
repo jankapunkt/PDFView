@@ -14,6 +14,7 @@ package com.jankuester.pdfviewer.core.model.resources.maps
 			super();
 		}
 		
+		
 		public function getFont(name:String):Font
 		{
 			return _dict[name];

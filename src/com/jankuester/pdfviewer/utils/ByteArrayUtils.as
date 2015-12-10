@@ -1,6 +1,5 @@
 package com.jankuester.pdfviewer.utils
 {
-	import com.jankuester.pdfviewertests.utils.StringUtils;
 	
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
@@ -85,35 +84,7 @@ package com.jankuester.pdfviewer.utils
 		 */	
 		public static function readString(ba:ByteArray, start:int=0, len:int=-1, preservePos:Boolean=true):String
 		{
-			if (ba == null)
-				ba = new ByteArray();
-			if (start < 0)
-				start=0;
-			if (start > ba.length)
-				start = ba.length;
-			if (len == -1)
-				len = ba.length;
-			var posBuff:int = ba.position;
-			ba.position = start;
-			var s:String="";
-			var count:int=0;
-			
-			while(ba.bytesAvailable && count < len)
-			{
-				try
-				{
-					s+=ba.readUTFBytes(1);
-					count++;
-				} 
-				catch(error:Error) 
-				{
-					s+=ba.readUTFBytes(ba.bytesAvailable);
-				}	
-			}
-			
-			if(preservePos)
-				ba.position = posBuff;
-			return s;
+			return readStringFromTo(ba, start, (start + len), preservePos);
 		}
 		
 		/**

@@ -22,7 +22,7 @@
 				maximize();
 				loader = new PDFLoader();
 				loader.addEventListener(PDFLoader.LOAD_COMPLETE, onLoadComplete);
-				loader.prepare("assets/lorem.pdf");
+				loader.prepare("assets/lorem1.pdf");
 				loader.loadFile();
 				
 			}
