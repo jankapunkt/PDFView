@@ -19,3 +19,9 @@ This project is released and maintained under the Apache 2.0 Licence.
 - Flex IDE of your choice
 
 If you are using apache flex sdk, you have to create a new branch and rewrite some base classes for compatibility, otherwise builds will generate errors. This is due to the aim, to provide backwards compatibility to Adobe Flex 4.6. A branch for Apache Flex Sdk will be set up soon.
+
+### Troubleshooting
+
+If your project works, but you get runtime errors, especially out of bound or end of file, try different PDF input files from the asset folder.
+
+Currently working, but not perfect are lorem.pdf and lorem2.pdf
