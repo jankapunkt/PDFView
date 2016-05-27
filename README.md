@@ -1,3 +1,5 @@
+Note: For any issues, contact me via [info@jankuester.com](mailto:info@jankuester.com)
+
 # PDFView
 Actionscript 3 based PDF viewer, built from scratch using the Adobe PDF specification standard. Aims to provide a viewer without using additional packages or code from third parties.
 
